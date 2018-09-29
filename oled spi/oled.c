@@ -300,7 +300,7 @@ void OLED_ShowNum(u8 x, u8 y, u32 num, u8 len, u8 size)
         {
             if(temp == 0)
             {
-                OLED_ShowChar(x + (size / 2)*t, y, '0', size, 1);
+                OLED_ShowChar(x + (size / 2)*t, y, ' ', size, 1);
                 continue;
             } else enshow = 1;
 
@@ -310,6 +310,26 @@ void OLED_ShowNum(u8 x, u8 y, u32 num, u8 len, u8 size)
 }
 
 
+//显示小数部分的数字
+void OLED_ShowFloatNum(u8 x, u8 y, u32 num, u8 len, u8 size)
+{
+    u8 t, temp;
+    u8 enshow = 0;
+    for(t = 0; t < len; t++)
+    {
+        temp = (num / mypow(10, len - t - 1)) % 10;
+        if(enshow == 0 && t < (len - 1))
+        {
+            if(temp == 0)
+            {
+                OLED_ShowChar(x + (size / 2)*t, y, '0', size, 1);
+                continue;
+            } else enshow = 1;
+
+        }
+        OLED_ShowChar(x + (size / 2)*t, y, temp + '0', size, 1);
+    }
+}
 
 /*************************************************************************/
 /*函数功能: 显示浮点数                                                   */
@@ -332,7 +352,7 @@ void OLED_ShowFloat(u8 x, u8 y, float num, u8 intlen, u8 floatlen, u8 size)
     OLED_DrawPoint(x + 6 * intlen + 3, y + 8, 1);											//显示小数点
     OLED_DrawPoint(x + 6 * intlen + 2, y + 9, 1);											//显示小数点
     OLED_DrawPoint(x + 6 * intlen + 3, y + 9, 1);											//显示小数点
-    OLED_ShowNum(x + 6 * (intlen + 1), y, floatnum, floatlen, size); //小数部分
+    OLED_ShowFloatNum(x + 6 * (intlen + 1), y, floatnum, floatlen, size); //小数部分
 }
 
 
